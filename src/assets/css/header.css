@@ -8,6 +8,10 @@ header * {
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
+  position: relative;
+  z-index: 10;
+  padding: .4rem 0;
+  border-bottom: 1px solid #fff;
 }
 /* 좌측박스 */
 .header_left_box {
@@ -23,6 +27,9 @@ header * {
   cursor: pointer;
 }
 .header_movie_contents:hover {
+  color: red;
+}
+.header_movie_contents a.on {
   color: red;
 }
 /* 우측박스 */

@@ -4,6 +4,7 @@ import HeaderCom from "./components/HeaderCom";
 import Home from "./pages/Home";
 import HeaderMovie from "./pages/HeaderMovie";
 import SearchPage from "./pages/SearchPage";
+import MovieDetail from "./pages/MovieDetail";
 
 function App() {
   return (
@@ -13,6 +14,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/navi/:ls" element={<HeaderMovie />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/search/:keyword" element={<SearchPage />} />
+        <Route path="/detail/:id" element={<MovieDetail />} />
       </Routes>
     </div>
   );
