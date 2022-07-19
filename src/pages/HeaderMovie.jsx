@@ -66,7 +66,7 @@ const HeaderMovie = () => {
                 <Link to={`/detail/${item.id}`}>
                   <ItemImg src={item.poster_path} />
                 </Link>
-                <SubBox>info</SubBox>
+                <SubBox></SubBox>
               </ItemLi>
             );
           })}
@@ -88,7 +88,7 @@ const SubBox = styled.div`
 `;
 const ItemUl = styled.ul`
   display: grid;
-  margin: 0 auto;
+  margin: 2rem auto 5rem auto;
   grid-template-columns: repeat(5, 1fr);
   width: 95%;
   max-width: 100%;

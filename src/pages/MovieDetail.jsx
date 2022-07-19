@@ -1,19 +1,59 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import styled from "styled-components";
+import ReactPlayer from "react-player";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 const MovieDetail = () => {
   let [detailData, setDetailData] = useState([]);
   let [actorData, setActorData] = useState([]);
+  let [similarData, setSimilarData] = useState([]);
+  let [trailarData, setTrailarData] = useState([]);
+  let [nowOn, setNowOn] = useState("actor");
+  const refActor = useRef();
+  const refSimilar = useRef();
+  const refTrailar = useRef();
   const navigate = useNavigate();
   const goBack = () => {
     navigate(-1);
   };
   const { id } = useParams();
+
+  const toTheTop = () => {
+    window.scrollTo({
+      top: 0,
+    });
+  };
+  const chooseSection = (e) => {
+    // console.log(e);
+    // console.log(e.target.innerText);
+    // console.log(refActor.current.classList.contains('on'));
+    refActor.current.classList.remove("on");
+    refSimilar.current.classList.remove("on");
+    refTrailar.current.classList.remove("on");
+    e.target.classList.add("on");
+
+    if (e.target.innerText == "관련영상") {
+      setNowOn("trailar");
+      console.log(1);
+    } else if (e.target.innerText == "관련영화") {
+      setNowOn("similar");
+      console.log(2);
+    } else {
+      setNowOn("actor");
+      console.log(3);
+    }
+  };
+
+  const findDirector = (person) => {
+    if (person.known_for_department === "Directing") {
+      return person;
+    }
+  };
+
   const api = async () => {
     axios
       .all([
@@ -35,24 +75,45 @@ const MovieDetail = () => {
       ])
       .then(
         axios.spread((detail, similar, actor, review, trailar) => {
-          console.log(detail.data);
-          console.log(similar.data.results);
-          console.log(actor.data);
-          console.log(review.data.results);
+          // console.log(detail.data);
+          // console.log(similar.data.results);
+          // console.log(actor.data);
+          // console.log(review.data.results);
           console.log(trailar.data.results);
           const apiData = detail.data;
           apiData.poster_path = `https://image.tmdb.org/t/p/w500${detail.data.poster_path}`;
           apiData.backdrop_path = `https://image.tmdb.org/t/p/w500${detail.data.backdrop_path}`;
           setDetailData(apiData);
-          setActorData(actor);
+          for (let i = 0; i < similar.data.results.length; i++) {
+            similar.data.results[
+              i
+            ].poster_path = `https://image.tmdb.org/t/p/w500${similar.data.results[i].poster_path}`;
+          }
+          setSimilarData(similar.data.results);
+          let casts = actor.data.cast.splice(0, 9);
+          let crews = actor.data.crew.find(findDirector);
+          if (crews != undefined) {
+            casts.unshift(crews);
+          } else {
+            console.log("언디파이인드임");
+          }
+          console.log(casts);
+          setActorData(casts);
+          setTrailarData(trailar.data.results);
         })
       );
   };
 
   useEffect(() => {
     // console.log(id);
+    setNowOn("actor");
+    refSimilar.current.classList.remove("on");
+    refTrailar.current.classList.remove("on");
+    refActor.current.classList.add("on");
+
     api();
-  }, []);
+    toTheTop();
+  }, [id]);
   return (
     <DetailParent
       className="detail_parent_box"
@@ -80,28 +141,78 @@ const MovieDetail = () => {
         </BannerBox>
         <div>
           <SectionBox>
-            <DetailSection>감독/배우</DetailSection>
-            <DetailSection>관련영화</DetailSection>
-            <DetailSection>관련영상</DetailSection>
+            <DetailSection onClick={chooseSection} ref={refActor}>
+              감독/배우
+            </DetailSection>
+            <DetailSection onClick={chooseSection} ref={refSimilar}>
+              관련영화
+            </DetailSection>
+            <DetailSection onClick={chooseSection} ref={refTrailar}>
+              관련영상
+            </DetailSection>
           </SectionBox>
-          <ul>
-            
-            <li></li>
-          </ul>
-          {/* <ul>
-            {actorData.cast.length == 0
-              ? <div></div>
-              : actorData.cast.map((item, idx) => {
-                  return (
-                    <li key={idx}>
-                      <h3>{item.name}</h3>
+
+          {nowOn == "actor" ? (
+            // {refActor.current.classList.contains("on") ? (
+            <SectionGridBox>
+              {actorData.map((item, idx) => {
+                return (
+                  <SectionGridItem key={idx}>
+                    <Link to={`/person/${item.id}`}>
                       <img
                         src={`https://image.tmdb.org/t/p/w500${item.profile_path}`}
                       />
-                    </li>
-                  );
-                })}
-          </ul> */}
+                    </Link>
+                    <h3>{item.name}</h3>
+                  </SectionGridItem>
+                );
+              })}
+            </SectionGridBox>
+          ) : (
+            <div></div>
+          )}
+
+          {nowOn == "similar" ? (
+            // {refSimilar.current.classList.contains("on") ? (
+            <SectionGridBox>
+              {similarData.map((item, idx) => {
+                return (
+                  <Link to={`/detail/${item.id}`} key={idx}>
+                    <SectionGridItem>
+                      <img src={item.poster_path} />
+                    </SectionGridItem>
+                  </Link>
+                );
+              })}
+            </SectionGridBox>
+          ) : (
+            <div></div>
+          )}
+
+          {nowOn == "trailar" ? (
+            // {refTrailar.current.classList.contains("on") ? (
+            <div>
+              {trailarData.map((item, idx) => {
+                return (
+                  <div key={idx}>
+                    <h2>{item.name}</h2>
+                    <ReactPlayer
+                      className="player"
+                      // url={item.key}
+                      url={`https://www.youtube.com/watch?v=${item.key}`}
+                      width="700px"
+                      heigth="700px"
+                      playing={false}
+                      muted={false}
+                      controls={true}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div></div>
+          )}
         </div>
       </BlurBox>
     </DetailParent>
@@ -147,13 +258,30 @@ const Genres = styled.span`
 `;
 
 const SectionBox = styled.section`
+  display: flex;
+  background-color: #1111;
+  font-size: 2rem;
   text-align: center;
   margin-top: 2rem;
-  padding-bottom: 3rem;
-  border-bottom: 1px solid #fff;
+  padding: 2rem;
+  justify-content: space-evenly;
+  /* padding-bottom: 3rem; */
+  /* border-bottom: 1px solid #fff; */
 `;
 const DetailSection = styled.span`
   margin-left: 5%;
   cursor: pointer;
+`;
+
+const SectionGridBox = styled.ul`
+  display: grid;
+  justify-items: center;
+  grid-template-columns: repeat(5, 1fr);
+  border-top: 1px solid #fff;
+  padding-top: 2rem;
+`;
+const SectionGridItem = styled.li`
+  cursor: pointer;
+  margin: 0 1rem 1rem 1rem;
 `;
 export default MovieDetail;

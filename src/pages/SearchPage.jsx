@@ -39,7 +39,10 @@ const SearchPage = () => {
         //   setSearchData(response.data.results);
         //   return;
         // }
-
+        // if (response.data.results.length == 0) {
+        //   navi(-1);
+        //   return;
+        // } else {
         console.log(keyword);
         console.log(response);
         // console.log(response.data.results);
@@ -62,6 +65,7 @@ const SearchPage = () => {
         } else {
           setSearchData(apiData);
         }
+        // }
       });
   };
   const getKeyword = (e) => {
@@ -80,6 +84,9 @@ const SearchPage = () => {
   useEffect(() => {
     // console.log(keyword);
     // console.log(queryPage);
+    if (keyword != "") {
+      setSearchKeyword(keyword);
+    }
     api();
   }, [searchKeyword]);
   return (
@@ -97,38 +104,46 @@ const SearchPage = () => {
           onClick={getKeyword}
         ></FontAwesomeIcon>
       </SearchBox>
-      <h2>{searchKeyword}</h2>
-      <InfiniteScroll
-        // pageStart={1}
-        pageStart={queryPage}
-        loadMore={api}
-        hasMore={true}
-        loader={
-          totalValue == queryPage - 1 ? (
-            <h2 className="loader">Sorry, No More Data!</h2>
-          ) : (
-            <BeatLoader
-              className="loader"
-              css={override}
-              size={100}
-              color="red"
-            />
-          )
-        }
-      >
-        <ItemUl>
-          {searchData.map((item, idx) => {
-            return (
-              <ItemLi key={idx}>
-                <Link to={`/detail/${item.id}`}>
-                  <img src={item.poster_path} />
-                </Link>
-                <div>{item.original_title}</div>
-              </ItemLi>
-            );
-          })}
-        </ItemUl>
-      </InfiniteScroll>
+      {keyword == undefined ? (
+        <ShowKeyword>오늘 이런영화 어때요? #해리포터</ShowKeyword>
+      ) : (
+        <ShowKeyword>검색어 : "{searchKeyword}"</ShowKeyword>
+      )}{" "}
+      {searchData.length == 0 ? (
+        <h1>데이터가 없습니다.</h1>
+      ) : (
+        <InfiniteScroll
+          // pageStart={1}
+          pageStart={queryPage}
+          loadMore={api}
+          hasMore={true}
+          loader={
+            totalValue == queryPage - 1 ? (
+              <h2 className="loader">Sorry, No More Data!</h2>
+            ) : (
+              <BeatLoader
+                className="loader"
+                css={override}
+                size={100}
+                color="red"
+              />
+            )
+          }
+        >
+          <ItemUl>
+            {searchData.map((item, idx) => {
+              return (
+                <ItemLi key={idx}>
+                  <Link to={`/detail/${item.id}`}>
+                    <img src={item.poster_path} />
+                  </Link>
+                  <div>{item.original_title}</div>
+                </ItemLi>
+              );
+            })}
+          </ItemUl>
+        </InfiniteScroll>
+      )}{" "}
     </SearchPageWrap>
   );
 };
@@ -181,6 +196,10 @@ const ItemLi = styled.li`
     transform: scale(130%);
     transition: ease-out 0.3s;
   }
+`;
+const ShowKeyword = styled.h2`
+  text-align: center;
+  margin: 1rem 0;
 `;
 
 export default SearchPage;

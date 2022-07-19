@@ -11,7 +11,7 @@ header * {
   position: relative;
   z-index: 10;
   padding: .4rem 0;
-  border-bottom: 1px solid #fff;
+  /* border-bottom: 1px solid #fff; */
 }
 /* 좌측박스 */
 .header_left_box {
@@ -29,8 +29,9 @@ header * {
 .header_movie_contents:hover {
   color: red;
 }
-.header_movie_contents a.on {
+.header_movie_contents a.on ,span.on {
   color: red;
+  display: block;
 }
 /* 우측박스 */
 .header_right_box {

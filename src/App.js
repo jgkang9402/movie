@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import HeaderMovie from "./pages/HeaderMovie";
 import SearchPage from "./pages/SearchPage";
 import MovieDetail from "./pages/MovieDetail";
+import ActorDetail from "./pages/ActorDetail";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search/:keyword" element={<SearchPage />} />
         <Route path="/detail/:id" element={<MovieDetail />} />
+        <Route path="/person/:who" element={<ActorDetail />} />
       </Routes>
     </div>
   );
