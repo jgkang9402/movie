@@ -8,12 +8,12 @@ import { Link } from "react-router-dom";
 
 const ListSlide = (props) => {
   const settings = {
-    dots: true,
+    // dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 6,
     slidesToScroll: 6,
-    accessibility: true,
+    // accessibility: true,
     arrows: true,
     lazyLoad: true,
     initialSlide:7,
@@ -23,7 +23,7 @@ const ListSlide = (props) => {
   };
 
   useEffect(()=>{
-    console.log(props);
+    // console.log(props);
   },[])
   
 

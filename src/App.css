@@ -38,3 +38,15 @@
   opacity: 1;
   background-color: rgba(51, 51, 51, 0.6) !important;
 }
+
+.main-icon-box {
+  display: inline-block;
+  position: fixed;
+  right: 10%;
+  bottom: 10%;
+  cursor: pointer;
+  z-index: 10;
+}
+.fa-circle-chevron-up {
+  /* color: red; */
+}

@@ -9,14 +9,19 @@ const HeaderCom = () => {
   let addOn1 = useRef();
   let addOn2 = useRef();
   let addOn3 = useRef();
+  let addOn4 = useRef();
 
   const addClassName = (e) => {
     addOn1.current.classList.remove("on");
     addOn2.current.classList.remove("on");
     addOn3.current.classList.remove("on");
+    addOn4.current.classList.remove("on");
     e.target.classList.add("on");
   };
 
+  const test =(e)=>{
+    console.log(e.target)
+  }
   
   return (
     <header className="header">
@@ -41,6 +46,11 @@ const HeaderCom = () => {
             Hottest
           </Link>
         </div>
+        <div className="header_movie_contents">
+          <Link to={"/navi/mylist"} ref={addOn4} onClick={addClassName}>
+            MyList
+          </Link>
+        </div>
       </div>
       <div className="header_right_box">
         <div className="search_icon_box">
@@ -53,7 +63,12 @@ const HeaderCom = () => {
           </Link>
         </div>
         <div className="user_box">
-          <div className="user" onClick={addClassName}></div>
+          <div className="user" onClick={addClassName}>
+            <div className="user_content_box">
+              <div onClick={test}>프로필</div>
+              <div onClick={test}>로그아웃</div>
+            </div>
+          </div>
         </div>
       </div>
     </header>

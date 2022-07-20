@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import styled from "styled-components";
 import ReactPlayer from "react-player";
+import { useDispatch, useSelector } from "react-redux";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 const MovieDetail = () => {
@@ -13,14 +14,25 @@ const MovieDetail = () => {
   let [similarData, setSimilarData] = useState([]);
   let [trailarData, setTrailarData] = useState([]);
   let [nowOn, setNowOn] = useState("actor");
+  let [like, setLike] = useState(false);
   const refActor = useRef();
   const refSimilar = useRef();
   const refTrailar = useRef();
+  const { id } = useParams();
   const navigate = useNavigate();
+  const reduxMyList = useSelector((state) => state.myList);
+  const dispatch = useDispatch();
   const goBack = () => {
     navigate(-1);
   };
-  const { id } = useParams();
+  const addMyList = () => {
+    setLike(!like);
+    dispatch({ type: "ADD_MOVIE", payload: { movieDetail: detailData } });
+  };
+  const removeMyList = () => {
+    setLike(!like);
+    dispatch({ type: "REMOVE_MOVIE", payload: { movieDetail: detailData } });
+  };
 
   const toTheTop = () => {
     window.scrollTo({
@@ -103,9 +115,17 @@ const MovieDetail = () => {
         })
       );
   };
+  useEffect(() => {
+    setLike(false)
+    for (let i = 0; i < reduxMyList.length; i++) {
+      if (reduxMyList[i].id == id) {
+        setLike(true);
+        return;
+      }
+    }
+  }, [id]);
 
   useEffect(() => {
-    // console.log(id);
     setNowOn("actor");
     refSimilar.current.classList.remove("on");
     refTrailar.current.classList.remove("on");
@@ -122,6 +142,18 @@ const MovieDetail = () => {
       }}
     >
       <BackBtn onClick={goBack}>🔙</BackBtn>
+      {id == undefined ? (
+        <div></div>
+      ) : (
+        <LikeBtn>
+          {like == false ? (
+            <span onClick={addMyList}>+</span>
+            // <span onClick={addMyList}>➕</span>
+          ) : (
+            <span onClick={removeMyList}>✔</span>
+          )}
+        </LikeBtn>
+      )}
       <BlurBox className="detail_blur_box">
         <BannerBox className="detail_banner_box">
           <div className="detail_img_box">
@@ -233,6 +265,14 @@ const BackBtn = styled.span`
   font-size: 40px;
   position: absolute;
   left: 5px;
+`;
+const LikeBtn = styled.div`
+  cursor: pointer;
+  font-size: 5rem;
+  position: absolute;
+  right: 5%;
+  color: red;
+  
 `;
 
 const BlurBox = styled.div`

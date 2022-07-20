@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import InfiniteScroll from "react-infinite-scroller";
 import BeatLoader from "react-spinners/BeatLoader";
+import MovieList from "../components/MovieList";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 const HeaderMovie = () => {
@@ -59,7 +60,8 @@ const HeaderMovie = () => {
         hasMore={true}
         loader={<BeatLoader className="loader" size={100} color="red" />}
       >
-        <ItemUl className="item-box">
+        <MovieList movieData={movieData}/>
+        {/* <ItemUl className="item-box">
           {movieData.map((item, idx) => {
             return (
               <ItemLi key={idx}>
@@ -70,7 +72,7 @@ const HeaderMovie = () => {
               </ItemLi>
             );
           })}
-        </ItemUl>
+        </ItemUl> */}
       </InfiniteScroll>
     </div>
   );

@@ -1,10 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { BeatLoader } from "react-spinners";
 import BannerSlide from "../components/BannerSlide";
 import ListSlide from "../components/ListSlide";
+import { css } from "@emotion/react";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
-
+const override = css`
+  text-align: center;
+`;
 const Home = () => {
   let [popularData, setPopularData] = useState([]);
   let [nowList, setNowList] = useState([]);
@@ -41,7 +45,7 @@ const Home = () => {
           // console.log(now.data.results);
           setPopularData(popular.data.results.splice(0, 10));
           setNowList(now.data.results.splice(0, 18));
-          setUpcomingList(upcoming.data.results.splice(0,18))
+          setUpcomingList(upcoming.data.results.splice(0, 18));
         })
       )
       .catch((err) => {
@@ -54,11 +58,17 @@ const Home = () => {
   }, []);
   return (
     <div>
-      <BannerSlide popularData={popularData} />
-      <h1>현재상영작</h1>
-      <ListSlide List={nowList} />
-      <h1>개봉예정작</h1>
-      <ListSlide List={upcomingList} />
+      {popularData.length == 0 ? (
+        <BeatLoader className="loader" css={override} size={100} color="red" />
+      ) : (
+        <div>
+          <BannerSlide popularData={popularData} />
+          <h1>현재상영작</h1>
+          <ListSlide List={nowList} />
+          <h1>개봉예정작</h1>
+          <ListSlide List={upcomingList} />
+        </div>
+      )}
     </div>
   );
 };

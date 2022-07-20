@@ -8,6 +8,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroller";
 import BeatLoader from "react-spinners/BeatLoader";
 import { css } from "@emotion/react";
+import MovieList from "../components/MovieList";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 const override = css`
@@ -130,7 +131,8 @@ const SearchPage = () => {
             )
           }
         >
-          <ItemUl>
+          <MovieList movieData={searchData}/>
+          {/* <ItemUl>
             {searchData.map((item, idx) => {
               return (
                 <ItemLi key={idx}>
@@ -141,7 +143,7 @@ const SearchPage = () => {
                 </ItemLi>
               );
             })}
-          </ItemUl>
+          </ItemUl> */}
         </InfiniteScroll>
       )}{" "}
     </SearchPageWrap>

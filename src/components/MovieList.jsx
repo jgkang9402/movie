@@ -3,11 +3,10 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const MovieList = ({ movieData, ls }) => {
+const MovieList = ({ movieData }) => {
   useEffect(() => {
     console.log(movieData);
-    console.log(ls);
-  }, [ls]);
+  }, []);
   // https://image.tmdb.org/t/p/w500${item.poster_path}
   return (
     <div>
@@ -32,9 +31,11 @@ const SubBox = styled.div`
   position: relative;
   z-index: 3;
   top: 0%;
-  &ItemLi:hover {
+  opacity: 0;
+  /* &ItemLi:hover {
     top: -40%;
-  }
+    opacity: 1;
+  } */
 `;
 const ItemUl = styled.ul`
   display: grid;
