@@ -50,3 +50,10 @@
 .fa-circle-chevron-up {
   /* color: red; */
 }
+
+.profile_h1{
+  padding-top: 5vh;
+  text-align: center;
+  border-bottom: 1px solid #fff;
+  margin-bottom: 3vh;
+}
