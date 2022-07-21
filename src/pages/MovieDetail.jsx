@@ -116,7 +116,7 @@ const MovieDetail = () => {
       );
   };
   useEffect(() => {
-    setLike(false)
+    setLike(false);
     for (let i = 0; i < reduxMyList.length; i++) {
       if (reduxMyList[i].id == id) {
         setLike(true);
@@ -148,8 +148,8 @@ const MovieDetail = () => {
         <LikeBtn>
           {like == false ? (
             <span onClick={addMyList}>+</span>
-            // <span onClick={addMyList}>➕</span>
           ) : (
+            // <span onClick={addMyList}>➕</span>
             <span onClick={removeMyList}>✔</span>
           )}
         </LikeBtn>
@@ -157,7 +157,11 @@ const MovieDetail = () => {
       <BlurBox className="detail_blur_box">
         <BannerBox className="detail_banner_box">
           <div className="detail_img_box">
-            <PosterImg src={detailData.poster_path} />
+            {detailData.poster_path == "https://image.tmdb.org/t/p/w500null" ? (
+              <PosterImg src="https://blog.yellowoctopus.com.au/wp-content/uploads/2020/08/yellow-octopus-no-meme-9.jpg" />
+            ) : (
+              <PosterImg src={detailData.poster_path} />
+            )}{" "}
           </div>
           <h1>{detailData.title}</h1>
           <h4>개봉일 : {detailData.release_date}</h4>
@@ -272,7 +276,6 @@ const LikeBtn = styled.div`
   position: absolute;
   right: 5%;
   color: red;
-  
 `;
 
 const BlurBox = styled.div`

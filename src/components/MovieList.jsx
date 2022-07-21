@@ -15,7 +15,11 @@ const MovieList = ({ movieData }) => {
           return (
             <ItemLi key={idx}>
               <Link to={`/detail/${item.id}`}>
-                <ItemImg src={item.poster_path} />
+                {item.poster_path == "https://image.tmdb.org/t/p/w500null" ? (
+                  <ItemImg src="https://blog.yellowoctopus.com.au/wp-content/uploads/2020/08/yellow-octopus-no-meme-9.jpg" />
+                ) : (
+                  <ItemImg src={item.poster_path} />
+                )}{" "}
               </Link>
               <SubBox>i</SubBox>
             </ItemLi>
